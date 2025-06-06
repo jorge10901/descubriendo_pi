@@ -140,6 +140,20 @@
             color: #F7FDFF;
         }
 
+        .cut-btn {
+            background-color: #9C4BD2;
+            color: white;
+        }
+
+        .cut-btn:hover {
+            background-color: #7B3AA8;
+        }
+
+        .cut-btn:disabled {
+            background-color: #CCB1E2;
+            cursor: not-allowed;
+        }
+
         .slider-container {
             display: flex;
             flex-direction: column;
@@ -223,6 +237,48 @@
             cursor: not-allowed;
         }
 
+        /* Segmentos apilados */
+        .segment-container {
+            position: absolute;
+            left: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            align-items: flex-start;
+        }
+
+        .tape-segment {
+            height: 8px;
+            background-color: #EAC148;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.5s ease-out;
+        }
+
+        .extra-segment {
+            height: 8px;
+            background-color: #EAC148;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            opacity: 0.8;
+            transition: transform 0.5s ease-out;
+        }
+
+        .cut-line {
+            position: absolute;
+            height: 2px;
+            background-color: #D04E95;
+            width: 100%;
+            animation: fadeCut 1s forwards;
+        }
+
+        @keyframes fadeCut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .portada h1 {
@@ -241,6 +297,11 @@
             .conclusion .contenido {
                 padding: 25px;
                 width: 90%;
+            }
+
+            .segment-container {
+                left: 10px;
+                gap: 5px;
             }
         }
     </style>
@@ -276,6 +337,7 @@
                 
                 <div class="animation-container">
                     <canvas id="unrollCanvas"></canvas>
+                    <div class="segment-container" id="segmentContainer"></div>
                 </div>
                 
                 <div class="controls">
@@ -285,6 +347,7 @@
                     </div>
                     
                     <button id="startBtn" class="action-btn">Comenzar desenrollado</button>
+                    <button id="cutBtn" class="cut-btn" disabled>Cortar (0/3)</button>
                 </div>
             </div>
         </div>
@@ -318,6 +381,8 @@
         const unrollCanvas = document.getElementById('unrollCanvas');
         const circleSizeSlider = document.getElementById('circleSize');
         const startBtn = document.getElementById('startBtn');
+        const cutBtn = document.getElementById('cutBtn');
+        const segmentContainer = document.getElementById('segmentContainer');
         
         // Variables de estado
         let diapositivaActual = 0;
@@ -327,7 +392,16 @@
         let isAnimating = false;
         let allStepsCompleted = false;
         const startX = 120; // Posición inicial más a la derecha
-        
+        let cutsMade = 0;
+        const totalCuts = 3;
+        let canCut = false;
+        let tapeLength = 0;
+        let remainingTape = 0;
+        let diameter = 0;
+        let tapePosition = { x: 0, y: 0 };
+        let circleCenter = { x: 0, y: 0 };
+        let isUnrolled = false;
+
         // Contexto del canvas
         const ctx = unrollCanvas.getContext('2d');
         
@@ -345,6 +419,7 @@
             nextBtn.addEventListener('click', nextDiapositiva);
             circleSizeSlider.addEventListener('input', handleSizeChange);
             startBtn.addEventListener('click', startAnimation);
+            cutBtn.addEventListener('click', handleCut);
             window.addEventListener('resize', resizeCanvas);
         }
         
@@ -360,8 +435,8 @@
         function nextDiapositiva() {
             if (diapositivaActual < diapositivas.length - 1) {
                 // En la diapositiva de circunferencias, verificar que se completaron los pasos
-                if (diapositivaActual === 2 && !allStepsCompleted) {
-                    alert('Por favor completa el desenrollado antes de continuar.');
+                if (diapositivaActual === 2 && (!allStepsCompleted || cutsMade < totalCuts)) {
+                    alert('Debes completar los 3 cortes antes de continuar');
                     return;
                 }
                 
@@ -415,6 +490,8 @@
             ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
             
             const baseY = unrollCanvas.height / 2;
+            diameter = 2 * r;
+            circleCenter = { x: startX, y: baseY - r };
             
             // Línea base (piso)
             ctx.beginPath();
@@ -426,13 +503,20 @@
             
             // Círculo completo
             ctx.beginPath();
-            ctx.arc(startX, baseY - r, r, 0, 2 * Math.PI);
+            ctx.arc(circleCenter.x, circleCenter.y, r, 0, 2 * Math.PI);
             ctx.strokeStyle = "#EAC148";
             ctx.lineWidth = 8;
             ctx.stroke();
             
             // Dibujar diámetro inicial
-            drawDiameter(startX, baseY - r, 0);
+            drawDiameter(circleCenter.x, circleCenter.y, 0);
+            
+            // Limpiar segmentos apilados
+            segmentContainer.innerHTML = '';
+            cutsMade = 0;
+            cutBtn.textContent = `Cortar (0/${totalCuts})`;
+            cutBtn.disabled = true;
+            isUnrolled = false;
         }
         
         // Función para dibujar el diámetro con rotación
@@ -458,20 +542,24 @@
             ctx.restore();
         }
         
-        // Comenzar animación
+        // Comenzar animación de desenrollado
         function startAnimation() {
             if (isAnimating) return;
             
+            // Reinicio completo
+            resetCutSystem();
             angle = 0;
             isAnimating = true;
             startBtn.disabled = true;
+            cutBtn.disabled = true;
+            circleSizeSlider.disabled = true;
             
             cancelAnimationFrame(animationId);
-            animate();
+            animateUnroll();
         }
         
         // Animación del desenrollado
-        function animate() {
+        function animateUnroll() {
             ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
             
             const baseY = unrollCanvas.height / 2;
@@ -536,20 +624,232 @@
             // Avanza mientras no se completa la vuelta
             if (angle < 2 * Math.PI) {
                 angle += 0.02;
-                animationId = requestAnimationFrame(animate);
+                animationId = requestAnimationFrame(animateUnroll);
             } else {
                 isAnimating = false;
-                allStepsCompleted = true;
+                tapeLength = 2 * Math.PI * r;
+                remainingTape = tapeLength;
+                cutBtn.disabled = false;
+                cutBtn.textContent = `Cortar (0/${totalCuts})`;
+                tapePosition = { x: startX + tapeLength, y: baseY };
+                circleCenter = { x: startX + tapeLength, y: baseY - r };
+                isUnrolled = true;
             }
         }
         
-        // Reiniciar animación
-        function resetAnimation() {
+        // Manejar corte
+        function handleCut() {
+            if (cutsMade >= totalCuts) return;
+            
+            cutBtn.disabled = true;
+            
+            // Animación en 3 pasos: mover al diámetro, cortar, mover segmento
+            animateCutProcess();
+        }
+        
+        function animateCutProcess() {
+            // Paso 1: Mover cinta al diámetro
+            moveTapeToDiameter(() => {
+                // Paso 2: Mostrar corte y crear segmento
+                showCutLine(() => {
+                    // Paso 3: Mover segmento a la pila
+                    moveSegmentToStack(() => {
+                        cutsMade++;
+                        cutBtn.textContent = `Cortar (${cutsMade}/${totalCuts})`;
+                        
+                        if (cutsMade < totalCuts) {
+                            cutBtn.disabled = false;
+                        } else {
+                            // Último corte: mover el sobrante
+                            moveRemainingTape(() => {
+                                allStepsCompleted = true;
+                                circleSizeSlider.disabled = false;
+                                startBtn.disabled = false;
+                            });
+                        }
+                    });
+                });
+            });
+        }
+        
+        function moveTapeToDiameter(callback) {
+            const targetX = circleCenter.x + r; // Punto final del diámetro
+            const targetY = circleCenter.y + r; // Base de la circunferencia
+            
+            function animate() {
+                const dx = targetX - tapePosition.x;
+                const dy = targetY - tapePosition.y;
+                
+                if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
+                    tapePosition.x += dx * 0.1;
+                    tapePosition.y += dy * 0.1;
+                    drawTapeAtPosition();
+                    animationId = requestAnimationFrame(animate);
+                } else {
+                    tapePosition = { x: targetX, y: targetY };
+                    drawTapeAtPosition();
+                    callback();
+                }
+            }
+            
             cancelAnimationFrame(animationId);
+            animate();
+        }
+        
+        function showCutLine(callback) {
+            const cutLine = document.createElement('div');
+            cutLine.className = 'cut-line';
+            cutLine.style.top = `${tapePosition.y}px`;
+            cutLine.style.left = `${tapePosition.x - diameter}px`;
+            cutLine.style.width = `${diameter}px`;
+            document.querySelector('.animation-container').appendChild(cutLine);
+            
+            // Eliminar después de la animación
+            setTimeout(() => {
+                cutLine.remove();
+                callback();
+            }, 1000);
+        }
+        
+        function moveSegmentToStack(callback) {
+            // Crear segmento
+            const segment = document.createElement('div');
+            segment.className = 'tape-segment';
+            segment.style.width = `${diameter}px`;
+            segment.style.position = 'absolute';
+            segment.style.top = `${tapePosition.y}px`;
+            segment.style.left = `${tapePosition.x - diameter}px`;
+            document.body.appendChild(segment);
+            
+            // Animación a la pila
+            const targetY = unrollCanvas.height / 2 - 100 + (cutsMade * 18);
+            
+            function animate() {
+                const currentLeft = parseFloat(segment.style.left);
+                const currentTop = parseFloat(segment.style.top);
+                
+                if (currentLeft > 30) {
+                    segment.style.left = `${currentLeft - 5}px`;
+                    segment.style.top = `${currentTop - (currentTop > targetY ? 1 : -1)}px`;
+                    requestAnimationFrame(animate);
+                } else {
+                    segment.style.left = '30px';
+                    segment.style.top = `${targetY}px`;
+                    segmentContainer.appendChild(segment);
+                    remainingTape -= diameter;
+                    drawTapeAtPosition();
+                    callback();
+                }
+            }
+            
+            animate();
+        }
+        
+        function moveRemainingTape(callback) {
+            if (remainingTape <= 0) {
+                callback();
+                return;
+            }
+            
+            // Crear segmento extra
+            const extraSegment = document.createElement('div');
+            extraSegment.className = 'extra-segment';
+            extraSegment.style.width = `${remainingTape}px`;
+            extraSegment.style.position = 'absolute';
+            extraSegment.style.top = `${tapePosition.y}px`;
+            extraSegment.style.left = `${tapePosition.x - remainingTape}px`;
+            document.body.appendChild(extraSegment);
+            
+            // Animación a la pila
+            const targetY = unrollCanvas.height / 2 - 100 + (totalCuts * 18);
+            
+            function animate() {
+                const currentLeft = parseFloat(extraSegment.style.left);
+                const currentTop = parseFloat(extraSegment.style.top);
+                
+                if (currentLeft > 30) {
+                    extraSegment.style.left = `${currentLeft - 5}px`;
+                    extraSegment.style.top = `${currentTop - (currentTop > targetY ? 1 : -1)}px`;
+                    requestAnimationFrame(animate);
+                } else {
+                    extraSegment.style.left = '30px';
+                    extraSegment.style.top = `${targetY}px`;
+                    segmentContainer.appendChild(extraSegment);
+                    callback();
+                }
+            }
+            
+            animate();
+        }
+        
+        function drawTapeAtPosition() {
+            ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+            
+            // Dibujar elementos estáticos (circunferencia)
+            drawStaticElements();
+            
+            // Dibujar cinta en su posición actual
+            if (remainingTape > 0) {
+                ctx.beginPath();
+                ctx.moveTo(tapePosition.x - remainingTape, tapePosition.y);
+                ctx.lineTo(tapePosition.x, tapePosition.y);
+                ctx.strokeStyle = "#EAC148";
+                ctx.lineWidth = 8;
+                ctx.stroke();
+            }
+        }
+        
+        function drawStaticElements() {
+            const baseY = unrollCanvas.height / 2;
+            
+            // Línea base (piso)
+            ctx.beginPath();
+            ctx.moveTo(0, baseY);
+            ctx.lineTo(unrollCanvas.width, baseY);
+            ctx.strokeStyle = "#6D8A92";
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            
+            if (isUnrolled) {
+                // Dibujar circunferencia desenrollada (azul)
+                ctx.beginPath();
+                ctx.arc(circleCenter.x, circleCenter.y, r, 0, 2 * Math.PI);
+                ctx.strokeStyle = "#2A6574";
+                ctx.lineWidth = 8;
+                ctx.stroke();
+                
+                // Dibujar diámetro (horizontal)
+                drawDiameter(circleCenter.x, circleCenter.y, 0);
+            } else {
+                // Dibujar circunferencia inicial (amarilla)
+                ctx.beginPath();
+                ctx.arc(startX, baseY - r, r, 0, 2 * Math.PI);
+                ctx.strokeStyle = "#EAC148";
+                ctx.lineWidth = 8;
+                ctx.stroke();
+                
+                // Dibujar diámetro inicial
+                drawDiameter(startX, baseY - r, 0);
+            }
+        }
+        
+        function resetCutSystem() {
+            cancelAnimationFrame(animationId);
+            cutsMade = 0;
+            remainingTape = 0;
+            segmentContainer.innerHTML = '';
+            allStepsCompleted = false;
+            isUnrolled = false;
+        }
+        
+        function resetAnimation() {
+            resetCutSystem();
             isAnimating = false;
             angle = 0;
-            allStepsCompleted = false;
             startBtn.disabled = false;
+            cutBtn.disabled = true;
+            circleSizeSlider.disabled = false;
+            cutBtn.textContent = `Cortar (0/${totalCuts})`;
             drawStatic();
         }
         
