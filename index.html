@@ -4,307 +4,297 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descubriendo el número π</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #F7FDFF;
-            min-height: 100vh;
-            overflow-x: hidden;
-            color: #004557;
-        }
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #F7FDFF;
+        min-height: 100vh;
+        overflow-x: hidden;
+        color: #004557;
+    }
 
-        .presentacion {
-            width: 100%;
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-        }
+    .presentacion {
+        width: 100%;
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+    }
 
-        .diapositiva {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: none;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+    .diapositiva {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: none;
+        padding: 20px;
+        box-sizing: border-box;
+    }
 
-        .diapositiva.activa {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+    .diapositiva.activa {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 
-        /* Portada */
-        .portada {
-            text-align: center;
-            background-color: #F7FDFF;
-        }
+    /* Portada */
+    .portada {
+        text-align: center;
+        background-color: #F7FDFF;
+    }
 
+    .portada h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+        color: #004557;
+    }
+
+    .portada p {
+        font-size: 1.5em;
+        max-width: 800px;
+        color: #2A6574;
+    }
+
+    /* Diapositiva de información */
+    .informacion {
+        background-color: #F7FDFF;
+    }
+
+    .informacion .contenido {
+        max-width: 800px;
+        padding: 40px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border: 1px solid #6D8A92;
+        text-align: left;
+    }
+
+    .informacion .contenido h2,
+    .informacion .contenido h3 {
+        color: #004557;
+    }
+
+    .informacion .contenido ol {
+        padding-left: 20px;
+    }
+
+    .informacion .contenido li {
+        margin-bottom: 10px;
+    }
+
+    /* Diapositiva de circunferencias */
+    .circunferencias {
+        background-color: #F7FDFF;
+    }
+
+    .circunferencias .contenido {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        max-width: 1000px;
+        position: relative;
+    }
+
+    .animation-container {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        margin-bottom: 20px;
+    }
+
+    canvas {
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* Controles mejorados */
+    .controls {
+        position: absolute;
+        bottom: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 300px;
+        z-index: 10;
+    }
+
+    .slider-container {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .slider-container input[type="range"] {
+        width: 100%;
+        transition: opacity 0.3s;
+    }
+
+    .slider-container input[type="range"]:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: all 0.3s;
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+    }
+
+    .action-btn {
+        background-color: #EAC148;
+        color: #004557;
+    }
+
+    .action-btn:hover:not(:disabled) {
+        background-color: #D04E95;
+        color: #F7FDFF;
+        transform: translateY(-2px);
+    }
+
+    .action-btn:disabled {
+        background-color: #e0e0e0;
+        color: #a0a0a0;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Diapositiva de conclusión */
+    .conclusion {
+        background-color: #F7FDFF;
+    }
+
+    .conclusion .contenido {
+        max-width: 800px;
+        padding: 40px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        border: 1px solid #6D8A92;
+        text-align: left;
+    }
+
+    .conclusion h2 {
+        color: #004557;
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+
+    .formula {
+        font-size: 2em;
+        margin: 30px 0;
+        color: #9C4BD2;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .explicacion {
+        font-size: 1.2em;
+        color: #2A6574;
+        line-height: 1.6;
+    }
+
+    .explicacion p {
+        margin-bottom: 15px;
+    }
+
+    /* Navegación */
+    .controles {
+        position: fixed;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        z-index: 100;
+    }
+
+    .nav-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        background-color: #2A6574;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+        background-color: #1e4d5a;
+        transform: translateY(-2px);
+    }
+
+    .nav-btn:disabled {
+        background-color: #6D8A92;
+        cursor: not-allowed;
+        opacity: 0.7;
+        transform: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
         .portada h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-            color: #004557;
+            font-size: 2em;
         }
-
+        
         .portada p {
-            font-size: 1.5em;
-            max-width: 800px;
-            color: #2A6574;
-        }
-
-        /* Diapositiva de información */
-        .informacion {
-            background-color: #F7FDFF;
-        }
-
-        .informacion .contenido {
-            max-width: 800px;
-            padding: 40px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border: 1px solid #6D8A92;
-            text-align: left;
-        }
-
-        .informacion .contenido h2,
-        .informacion .contenido h3 {
-            color: #004557;
-        }
-
-        .informacion .contenido ol {
-            padding-left: 20px;
-        }
-
-        .informacion .contenido li {
-            margin-bottom: 10px;
-        }
-
-        /* Diapositiva de circunferencias */
-        .circunferencias {
-            background-color: #F7FDFF;
-        }
-
-        .circunferencias .contenido {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-            max-width: 1000px;
-        }
-
-        .animation-container {
-            position: relative;
-            width: 100%;
-            height: 400px;
-            margin-bottom: 20px;
-        }
-
-        canvas {
-            display: block;
-            margin: 0 auto;
-        }
-
-        .controls {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            padding: 20px;
-            border-radius: 8px;
-            width: 300px;
-        }
-
-        button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background-color 0.3s;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .action-btn {
-            background-color: #EAC148;
-            color: #004557;
-        }
-
-        .action-btn:hover {
-            background-color: #D04E95;
-            color: #F7FDFF;
-        }
-
-        .cut-btn {
-            background-color: #9C4BD2;
-            color: white;
-        }
-
-        .cut-btn:hover {
-            background-color: #7B3AA8;
-        }
-
-        .cut-btn:disabled {
-            background-color: #CCB1E2;
-            cursor: not-allowed;
-        }
-
-        .slider-container {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        input[type="range"] {
-            width: 100%;
-        }
-
-        /* Diapositiva de conclusión */
-        .conclusion {
-            background-color: #F7FDFF;
-        }
-
-        .conclusion .contenido {
-            max-width: 800px;
-            padding: 40px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border: 1px solid #6D8A92;
-            text-align: left;
-        }
-
-        .conclusion h2 {
-            color: #004557;
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-
-        .formula {
-            font-size: 2em;
-            margin: 30px 0;
-            color: #9C4BD2;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .explicacion {
             font-size: 1.2em;
-            color: #2A6574;
-            line-height: 1.6;
         }
-
-        .explicacion p {
-            margin-bottom: 15px;
+        
+        .animation-container {
+            height: 300px;
         }
-
-        /* Navegación */
-        .controles {
-            position: fixed;
-            bottom: 20px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            z-index: 100;
+        
+        .informacion .contenido,
+        .conclusion .contenido {
+            padding: 25px;
+            width: 90%;
         }
-
+        
+        .controls {
+            width: 90%;
+            max-width: 300px;
+            bottom: 120px;
+            padding: 15px;
+        }
+        
+        button {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+        
         .nav-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #2A6574;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 500;
+            padding: 8px 16px;
+            font-size: 14px;
         }
+    }
 
-        .nav-btn:hover {
-            background-color: #1e4d5a;
+    @media (max-width: 480px) {
+        .controls {
+            bottom: 100px;
+            gap: 10px;
         }
-
-        .nav-btn:disabled {
-            background-color: #6D8A92;
-            cursor: not-allowed;
+        
+        .slider-container {
+            gap: 3px;
         }
-
-        /* Segmentos apilados */
-        .segment-container {
-            position: absolute;
-            left: 30px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            align-items: flex-start;
-        }
-
-        .tape-segment {
-            height: 8px;
-            background-color: #EAC148;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            transition: transform 0.5s ease-out;
-        }
-
-        .extra-segment {
-            height: 8px;
-            background-color: #EAC148;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            opacity: 0.8;
-            transition: transform 0.5s ease-out;
-        }
-
-        .cut-line {
-            position: absolute;
-            height: 2px;
-            background-color: #D04E95;
-            width: 100%;
-            animation: fadeCut 1s forwards;
-        }
-
-        @keyframes fadeCut {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .portada h1 {
-                font-size: 2em;
-            }
-            
-            .portada p {
-                font-size: 1.2em;
-            }
-            
-            .animation-container {
-                height: 300px;
-            }
-            
-            .informacion .contenido,
-            .conclusion .contenido {
-                padding: 25px;
-                width: 90%;
-            }
-
-            .segment-container {
-                left: 10px;
-                gap: 5px;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
     <div class="presentacion">
@@ -332,24 +322,27 @@
         
         <!-- Circunferencias interactivas -->
         <div class="diapositiva circunferencias">
-            <div class="contenido">
-                <h2>Explora la relación entre circunferencia y diámetro</h2>
-                
-                <div class="animation-container">
-                    <canvas id="unrollCanvas"></canvas>
-                    <div class="segment-container" id="segmentContainer"></div>
-                </div>
-                
-                <div class="controls">
+            <div class="circunferencias">
+              <div class="contenido">
+                  <h2>Explora la relación entre circunferencia y diámetro</h2>
+                  
+                  <div class="animation-container">
+                      <canvas id="unrollCanvas"></canvas>
+                  </div>
+                  
+                  <div class="controls">
                     <div class="slider-container">
                         <label for="circleSize">Tamaño del círculo:</label>
                         <input type="range" id="circleSize" min="30" max="80" value="60">
                     </div>
                     
                     <button id="startBtn" class="action-btn">Comenzar desenrollado</button>
-                    <button id="cutBtn" class="cut-btn" disabled>Cortar (0/3)</button>
+                    <button id="moverCortarBtn1" class="action-btn" disabled>Mover y Cortar 1</button>
+                    <button id="moverCortarBtn2" class="action-btn" disabled>Mover y Cortar 2</button>
+                    <button id="moverCortarBtn3" class="action-btn" disabled>Mover y Cortar 3</button>
                 </div>
-            </div>
+              </div>
+          </div>
         </div>
         
         <!-- Conclusión -->
@@ -373,488 +366,951 @@
         </div>
     </div>
     
-    <script>
-        // Elementos del DOM
-        const diapositivas = document.querySelectorAll('.diapositiva');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        const unrollCanvas = document.getElementById('unrollCanvas');
-        const circleSizeSlider = document.getElementById('circleSize');
-        const startBtn = document.getElementById('startBtn');
-        const cutBtn = document.getElementById('cutBtn');
-        const segmentContainer = document.getElementById('segmentContainer');
-        
-        // Variables de estado
-        let diapositivaActual = 0;
-        let r = 60; // radio inicial (valor medio del slider)
-        let angle = 0;
-        let animationId = null;
-        let isAnimating = false;
-        let allStepsCompleted = false;
-        const startX = 120; // Posición inicial más a la derecha
-        let cutsMade = 0;
-        const totalCuts = 3;
-        let canCut = false;
-        let tapeLength = 0;
-        let remainingTape = 0;
-        let diameter = 0;
-        let tapePosition = { x: 0, y: 0 };
-        let circleCenter = { x: 0, y: 0 };
-        let isUnrolled = false;
-
-        // Contexto del canvas
-        const ctx = unrollCanvas.getContext('2d');
-        
-        // Inicializar presentación
-        function init() {
+<script>
+    // Elementos del DOM
+    const diapositivas = document.querySelectorAll('.diapositiva');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const unrollCanvas = document.getElementById('unrollCanvas');
+    const circleSizeSlider = document.getElementById('circleSize');
+    const startBtn = document.getElementById('startBtn');
+    const moverCortarBtn1 = document.getElementById('moverCortarBtn1');
+    const moverCortarBtn2 = document.getElementById('moverCortarBtn2');
+    const moverCortarBtn3 = document.getElementById('moverCortarBtn3');
+    
+    // Variables de estado
+    let diapositivaActual = 0;
+    let r = 60; // radio inicial (valor medio del slider)
+    let angle = 0;
+    let animationId = null;
+    let isAnimating = false;
+    let allStepsCompleted = false;
+    let trasladado1 = false;
+    let segmentoCortado = false;
+    let segmentoTrasladado = false;
+    let trasladado2 = false;
+    let segmentoCortado2 = false;
+    let segmentoTrasladado2 = false;
+    let trasladado3_1 = false;
+    let segmentoCortado3_1 = false;
+    let segmentoTrasladado3_1 = false;
+    let trasladado3_2 = false;
+    let segmentoCortado3_2 = false;
+    let segmentoTrasladado3_2 = false;
+    const startX = 120; // Posición inicial más a la derecha
+    
+    // Variables para animación unificada
+    let animacionActual = null;
+    let progresoAnimacion = 0;
+    const velocidadAnimacion = 0.02;
+    
+    // Contexto del canvas
+    const ctx = unrollCanvas.getContext('2d');
+    
+    // Inicializar presentación
+    function init() {
+        updateNavButtons();
+        resetButtonStates();
+        resizeCanvas();
+        addEventListeners();
+        drawStatic();
+    }
+    
+    // Añadir event listeners
+    function addEventListeners() {
+        prevBtn.addEventListener('click', prevDiapositiva);
+        nextBtn.addEventListener('click', nextDiapositiva);
+        circleSizeSlider.addEventListener('input', handleSizeChange);
+        startBtn.addEventListener('click', startAnimation);
+        moverCortarBtn1.addEventListener('click', iniciarMoverYCortar1);
+        moverCortarBtn2.addEventListener('click', iniciarMoverYCortar2);
+        moverCortarBtn3.addEventListener('click', iniciarMoverYCortar3);
+        window.addEventListener('resize', resizeCanvas);
+    }
+    
+    // Control de estados de los botones
+    function resetButtonStates() {
+        startBtn.disabled = false;
+        moverCortarBtn1.disabled = true;
+        moverCortarBtn2.disabled = true;
+        moverCortarBtn3.disabled = true;
+        circleSizeSlider.disabled = false;
+        nextBtn.disabled = diapositivaActual === 2 && !allStepsCompleted;
+    }
+    
+    // Navegación entre diapositivas
+    function prevDiapositiva() {
+        if (diapositivaActual > 0) {
+            diapositivaActual--;
+            showDiapositiva(diapositivaActual);
             updateNavButtons();
-            resizeCanvas();
-            addEventListeners();
-            drawStatic();
+            resetButtonStates();
         }
-        
-        // Añadir event listeners
-        function addEventListeners() {
-            prevBtn.addEventListener('click', prevDiapositiva);
-            nextBtn.addEventListener('click', nextDiapositiva);
-            circleSizeSlider.addEventListener('input', handleSizeChange);
-            startBtn.addEventListener('click', startAnimation);
-            cutBtn.addEventListener('click', handleCut);
-            window.addEventListener('resize', resizeCanvas);
-        }
-        
-        // Navegación entre diapositivas
-        function prevDiapositiva() {
-            if (diapositivaActual > 0) {
-                diapositivaActual--;
-                showDiapositiva(diapositivaActual);
-                updateNavButtons();
-            }
-        }
-        
-        function nextDiapositiva() {
-            if (diapositivaActual < diapositivas.length - 1) {
-                // En la diapositiva de circunferencias, verificar que se completaron los pasos
-                if (diapositivaActual === 2 && (!allStepsCompleted || cutsMade < totalCuts)) {
-                    alert('Debes completar los 3 cortes antes de continuar');
-                    return;
-                }
-                
-                diapositivaActual++;
-                showDiapositiva(diapositivaActual);
-                updateNavButtons();
-            }
-        }
-        
-        function showDiapositiva(index) {
-            diapositivas.forEach((diapositiva, i) => {
-                if (i === index) {
-                    diapositiva.classList.add('activa');
-                    
-                    // Si es la diapositiva de animación, reiniciar
-                    if (i === 2) {
-                        resetAnimation();
-                    }
-                } else {
-                    diapositiva.classList.remove('activa');
-                }
-            });
-        }
-        
-        function updateNavButtons() {
-            prevBtn.disabled = diapositivaActual === 0;
-            
-            // En la última diapositiva (conclusión), ocultar el botón Siguiente
-            if (diapositivaActual === diapositivas.length - 1) {
-                nextBtn.style.display = 'none';
-            } else {
-                nextBtn.style.display = 'inline-block';
-            }
-        }
-        
-        // Manejar cambio de tamaño del círculo
-        function handleSizeChange() {
-            r = parseInt(circleSizeSlider.value);
-            resetAnimation();
-        }
-        
-        // Redimensionar canvas
-        function resizeCanvas() {
-            unrollCanvas.width = Math.min(800, window.innerWidth - 40);
-            unrollCanvas.height = 400;
-            drawStatic();
-        }
-        
-        // Dibujar estado inicial
-        function drawStatic() {
-            ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
-            
-            const baseY = unrollCanvas.height / 2;
-            diameter = 2 * r;
-            circleCenter = { x: startX, y: baseY - r };
-            
-            // Línea base (piso)
-            ctx.beginPath();
-            ctx.moveTo(0, baseY);
-            ctx.lineTo(unrollCanvas.width, baseY);
-            ctx.strokeStyle = "#6D8A92";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-            
-            // Círculo completo
-            ctx.beginPath();
-            ctx.arc(circleCenter.x, circleCenter.y, r, 0, 2 * Math.PI);
-            ctx.strokeStyle = "#EAC148";
-            ctx.lineWidth = 8;
-            ctx.stroke();
-            
-            // Dibujar diámetro inicial
-            drawDiameter(circleCenter.x, circleCenter.y, 0);
-            
-            // Limpiar segmentos apilados
-            segmentContainer.innerHTML = '';
-            cutsMade = 0;
-            cutBtn.textContent = `Cortar (0/${totalCuts})`;
-            cutBtn.disabled = true;
-            isUnrolled = false;
-        }
-        
-        // Función para dibujar el diámetro con rotación
-        function drawDiameter(cx, cy, rotationAngle) {
-            ctx.save();
-            ctx.translate(cx, cy);
-            ctx.rotate(rotationAngle);
-            
-            ctx.beginPath();
-            ctx.moveTo(-r, 0);
-            ctx.lineTo(r, 0);
-            ctx.strokeStyle = "#D04E95";
-            ctx.lineWidth = 2;
-            ctx.setLineDash([5, 3]);
-            ctx.stroke();
-            ctx.setLineDash([]);
-            
-            // Etiqueta diámetro
-            ctx.font = '16px Poppins';
-            ctx.fillStyle = "#D04E95";
-            ctx.fillText('D', 0, 20);
-            
-            ctx.restore();
-        }
-        
-        // Comenzar animación de desenrollado
-        function startAnimation() {
-            if (isAnimating) return;
-            
-            // Reinicio completo
-            resetCutSystem();
-            angle = 0;
-            isAnimating = true;
-            startBtn.disabled = true;
-            cutBtn.disabled = true;
-            circleSizeSlider.disabled = true;
-            
-            cancelAnimationFrame(animationId);
-            animateUnroll();
-        }
-        
-        // Animación del desenrollado
-        function animateUnroll() {
-            ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
-            
-            const baseY = unrollCanvas.height / 2;
-            
-            const cx = startX + r * angle;
-            const cy = baseY - r;
-            
-            const px = cx + r * Math.sin(-angle);
-            const py = cy + r * Math.cos(-angle);
-            
-            // Línea base (piso)
-            ctx.beginPath();
-            ctx.moveTo(0, baseY);
-            ctx.lineTo(unrollCanvas.width, baseY);
-            ctx.strokeStyle = "#6D8A92";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-            
-            // Dibujar diámetro con rotación
-            drawDiameter(cx, cy, angle);
-            
-            // Arco azul: parte ya desenrollada
-            if (angle > 0) {
-                ctx.beginPath();
-                ctx.arc(cx, cy, r, Math.PI/2, Math.PI/2 + angle, false);
-                ctx.strokeStyle = "#2A6574";
-                ctx.lineWidth = 8;
-                ctx.stroke();
-            }
-            
-            // Arco amarillo: parte restante
-            if (angle < 2*Math.PI) {
-                ctx.beginPath();
-                ctx.arc(cx, cy, r, Math.PI/2 + angle, Math.PI/2, false);
-                ctx.strokeStyle = "#EAC148";
-                ctx.lineWidth = 8;
-                ctx.stroke();
-            }
-            
-            // Cinta amarilla desenrollada (sobre el suelo)
-            ctx.beginPath();
-            ctx.moveTo(startX, baseY);
-            ctx.lineTo(startX + r * angle, baseY);
-            ctx.strokeStyle = "#EAC148";
-            ctx.lineWidth = 8;
-            ctx.stroke();
-            
-            // Radio al punto rosa
-            ctx.beginPath();
-            ctx.moveTo(cx, cy);
-            ctx.lineTo(px, py);
-            ctx.strokeStyle = "#6D8A92";
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-            
-            // Punto rosa
-            ctx.beginPath();
-            ctx.arc(px, py, 6, 0, 2 * Math.PI);
-            ctx.fillStyle = "#D04E95";
-            ctx.fill();
-            
-            // Avanza mientras no se completa la vuelta
-            if (angle < 2 * Math.PI) {
-                angle += 0.02;
-                animationId = requestAnimationFrame(animateUnroll);
-            } else {
-                isAnimating = false;
-                tapeLength = 2 * Math.PI * r;
-                remainingTape = tapeLength;
-                cutBtn.disabled = false;
-                cutBtn.textContent = `Cortar (0/${totalCuts})`;
-                tapePosition = { x: startX + tapeLength, y: baseY };
-                circleCenter = { x: startX + tapeLength, y: baseY - r };
-                isUnrolled = true;
-            }
-        }
-        
-        // Manejar corte
-        function handleCut() {
-            if (cutsMade >= totalCuts) return;
-            
-            cutBtn.disabled = true;
-            
-            // Animación en 3 pasos: mover al diámetro, cortar, mover segmento
-            animateCutProcess();
-        }
-        
-        function animateCutProcess() {
-            // Paso 1: Mover cinta al diámetro
-            moveTapeToDiameter(() => {
-                // Paso 2: Mostrar corte y crear segmento
-                showCutLine(() => {
-                    // Paso 3: Mover segmento a la pila
-                    moveSegmentToStack(() => {
-                        cutsMade++;
-                        cutBtn.textContent = `Cortar (${cutsMade}/${totalCuts})`;
-                        
-                        if (cutsMade < totalCuts) {
-                            cutBtn.disabled = false;
-                        } else {
-                            // Último corte: mover el sobrante
-                            moveRemainingTape(() => {
-                                allStepsCompleted = true;
-                                circleSizeSlider.disabled = false;
-                                startBtn.disabled = false;
-                            });
-                        }
-                    });
-                });
-            });
-        }
-        
-        function moveTapeToDiameter(callback) {
-            const targetX = circleCenter.x + r; // Punto final del diámetro
-            const targetY = circleCenter.y + r; // Base de la circunferencia
-            
-            function animate() {
-                const dx = targetX - tapePosition.x;
-                const dy = targetY - tapePosition.y;
-                
-                if (Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5) {
-                    tapePosition.x += dx * 0.1;
-                    tapePosition.y += dy * 0.1;
-                    drawTapeAtPosition();
-                    animationId = requestAnimationFrame(animate);
-                } else {
-                    tapePosition = { x: targetX, y: targetY };
-                    drawTapeAtPosition();
-                    callback();
-                }
-            }
-            
-            cancelAnimationFrame(animationId);
-            animate();
-        }
-        
-        function showCutLine(callback) {
-            const cutLine = document.createElement('div');
-            cutLine.className = 'cut-line';
-            cutLine.style.top = `${tapePosition.y}px`;
-            cutLine.style.left = `${tapePosition.x - diameter}px`;
-            cutLine.style.width = `${diameter}px`;
-            document.querySelector('.animation-container').appendChild(cutLine);
-            
-            // Eliminar después de la animación
-            setTimeout(() => {
-                cutLine.remove();
-                callback();
-            }, 1000);
-        }
-        
-        function moveSegmentToStack(callback) {
-            // Crear segmento
-            const segment = document.createElement('div');
-            segment.className = 'tape-segment';
-            segment.style.width = `${diameter}px`;
-            segment.style.position = 'absolute';
-            segment.style.top = `${tapePosition.y}px`;
-            segment.style.left = `${tapePosition.x - diameter}px`;
-            document.body.appendChild(segment);
-            
-            // Animación a la pila
-            const targetY = unrollCanvas.height / 2 - 100 + (cutsMade * 18);
-            
-            function animate() {
-                const currentLeft = parseFloat(segment.style.left);
-                const currentTop = parseFloat(segment.style.top);
-                
-                if (currentLeft > 30) {
-                    segment.style.left = `${currentLeft - 5}px`;
-                    segment.style.top = `${currentTop - (currentTop > targetY ? 1 : -1)}px`;
-                    requestAnimationFrame(animate);
-                } else {
-                    segment.style.left = '30px';
-                    segment.style.top = `${targetY}px`;
-                    segmentContainer.appendChild(segment);
-                    remainingTape -= diameter;
-                    drawTapeAtPosition();
-                    callback();
-                }
-            }
-            
-            animate();
-        }
-        
-        function moveRemainingTape(callback) {
-            if (remainingTape <= 0) {
-                callback();
+    }
+    
+    function nextDiapositiva() {
+        if (diapositivaActual < diapositivas.length - 1) {
+            if (diapositivaActual === 2 && !allStepsCompleted) {
+                alert('Por favor completa el desenrollado antes de continuar.');
                 return;
             }
             
-            // Crear segmento extra
-            const extraSegment = document.createElement('div');
-            extraSegment.className = 'extra-segment';
-            extraSegment.style.width = `${remainingTape}px`;
-            extraSegment.style.position = 'absolute';
-            extraSegment.style.top = `${tapePosition.y}px`;
-            extraSegment.style.left = `${tapePosition.x - remainingTape}px`;
-            document.body.appendChild(extraSegment);
-            
-            // Animación a la pila
-            const targetY = unrollCanvas.height / 2 - 100 + (totalCuts * 18);
-            
-            function animate() {
-                const currentLeft = parseFloat(extraSegment.style.left);
-                const currentTop = parseFloat(extraSegment.style.top);
+            diapositivaActual++;
+            showDiapositiva(diapositivaActual);
+            updateNavButtons();
+            resetButtonStates();
+        }
+    }
+    
+    function updateNavButtons() {
+        prevBtn.disabled = diapositivaActual === 0;
+        
+        if (diapositivaActual === diapositivas.length - 1) {
+            nextBtn.style.display = 'none';
+        } else {
+            nextBtn.style.display = 'inline-block';
+        }
+    }
+    
+    function showDiapositiva(index) {
+        diapositivas.forEach((diapositiva, i) => {
+            if (i === index) {
+                diapositiva.classList.add('activa');
                 
-                if (currentLeft > 30) {
-                    extraSegment.style.left = `${currentLeft - 5}px`;
-                    extraSegment.style.top = `${currentTop - (currentTop > targetY ? 1 : -1)}px`;
-                    requestAnimationFrame(animate);
-                } else {
-                    extraSegment.style.left = '30px';
-                    extraSegment.style.top = `${targetY}px`;
-                    segmentContainer.appendChild(extraSegment);
-                    callback();
+                if (i === 2) {
+                    resetAnimation();
                 }
-            }
-            
-            animate();
-        }
-        
-        function drawTapeAtPosition() {
-            ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
-            
-            // Dibujar elementos estáticos (circunferencia)
-            drawStaticElements();
-            
-            // Dibujar cinta en su posición actual
-            if (remainingTape > 0) {
-                ctx.beginPath();
-                ctx.moveTo(tapePosition.x - remainingTape, tapePosition.y);
-                ctx.lineTo(tapePosition.x, tapePosition.y);
-                ctx.strokeStyle = "#EAC148";
-                ctx.lineWidth = 8;
-                ctx.stroke();
-            }
-        }
-        
-        function drawStaticElements() {
-            const baseY = unrollCanvas.height / 2;
-            
-            // Línea base (piso)
-            ctx.beginPath();
-            ctx.moveTo(0, baseY);
-            ctx.lineTo(unrollCanvas.width, baseY);
-            ctx.strokeStyle = "#6D8A92";
-            ctx.lineWidth = 1;
-            ctx.stroke();
-            
-            if (isUnrolled) {
-                // Dibujar circunferencia desenrollada (azul)
-                ctx.beginPath();
-                ctx.arc(circleCenter.x, circleCenter.y, r, 0, 2 * Math.PI);
-                ctx.strokeStyle = "#2A6574";
-                ctx.lineWidth = 8;
-                ctx.stroke();
-                
-                // Dibujar diámetro (horizontal)
-                drawDiameter(circleCenter.x, circleCenter.y, 0);
             } else {
-                // Dibujar circunferencia inicial (amarilla)
-                ctx.beginPath();
-                ctx.arc(startX, baseY - r, r, 0, 2 * Math.PI);
-                ctx.strokeStyle = "#EAC148";
-                ctx.lineWidth = 8;
-                ctx.stroke();
+                diapositiva.classList.remove('activa');
+            }
+        });
+    }
+    
+    // Manejar cambio de tamaño del círculo
+    function handleSizeChange() {
+        r = parseInt(circleSizeSlider.value);
+        resetAnimation();
+    }
+    
+    // Redimensionar canvas
+    function resizeCanvas() {
+        unrollCanvas.width = Math.min(800, window.innerWidth - 40);
+        unrollCanvas.height = 400;
+        drawStatic();
+    }
+    
+    // Dibujar la circunferencia (siempre visible)
+    function dibujarCircunferencia() {
+        const baseY = unrollCanvas.height / 2;
+        ctx.beginPath();
+        ctx.arc(startX + 2 * Math.PI * r, baseY - r, r, 0, 2 * Math.PI);
+        ctx.strokeStyle = "#2A6574";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+    }
+    
+    // Dibujar estado inicial
+    function drawStatic() {
+        ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+        
+        const baseY = unrollCanvas.height / 2;
+        
+        // Línea base (piso)
+        ctx.beginPath();
+        ctx.moveTo(0, baseY);
+        ctx.lineTo(unrollCanvas.width, baseY);
+        ctx.strokeStyle = "#6D8A92";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        
+        // Círculo completo
+        ctx.beginPath();
+        ctx.arc(startX, baseY - r, r, 0, 2 * Math.PI);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Dibujar diámetro inicial
+        drawDiameter(startX, baseY - r, 0);
+    }
+    
+    // Función para dibujar el diámetro con rotación
+    function drawDiameter(cx, cy, rotationAngle) {
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(rotationAngle);
+        
+        ctx.beginPath();
+        ctx.moveTo(-r, 0);
+        ctx.lineTo(r, 0);
+        ctx.strokeStyle = "#D04E95";
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 3]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        // Etiqueta diámetro
+        ctx.font = '16px Poppins';
+        ctx.fillStyle = "#D04E95";
+        ctx.fillText('D', 0, 20);
+        
+        ctx.restore();
+    }
+    
+    // Comenzar animación de desenrollado
+    function startAnimation() {
+        if (isAnimating) return;
+        
+        angle = 0;
+        isAnimating = true;
+        allStepsCompleted = false;
+        
+        // Deshabilitar controles
+        startBtn.disabled = true;
+        circleSizeSlider.disabled = true;
+        
+        // Habilitar siguiente paso
+        moverCortarBtn1.disabled = false;
+        
+        cancelAnimationFrame(animationId);
+        animate();
+    }
+    
+    // Animación del desenrollado
+    function animate() {
+        ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+        
+        const baseY = unrollCanvas.height / 2;
+        
+        const cx = startX + r * angle;
+        const cy = baseY - r;
+        
+        const px = cx + r * Math.sin(-angle);
+        const py = cy + r * Math.cos(-angle);
+        
+        // Línea base (piso)
+        ctx.beginPath();
+        ctx.moveTo(0, baseY);
+        ctx.lineTo(unrollCanvas.width, baseY);
+        ctx.strokeStyle = "#6D8A92";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        
+        // Dibujar diámetro con rotación
+        drawDiameter(cx, cy, angle);
+        
+        // Arco azul: parte ya desenrollada
+        if (angle > 0) {
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, Math.PI/2, Math.PI/2 + angle, false);
+            ctx.strokeStyle = "#2A6574";
+            ctx.lineWidth = 8;
+            ctx.stroke();
+        }
+        
+        // Arco amarillo: parte restante
+        if (angle < 2*Math.PI) {
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, Math.PI/2 + angle, Math.PI/2, false);
+            ctx.strokeStyle = "#EAC148";
+            ctx.lineWidth = 8;
+            ctx.stroke();
+        }
+        
+        // Cinta amarilla desenrollada (sobre el suelo)
+        ctx.beginPath();
+        ctx.moveTo(startX, baseY);
+        ctx.lineTo(startX + r * angle, baseY);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Radio al punto rosa
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(px, py);
+        ctx.strokeStyle = "#6D8A92";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        
+        // Punto rosa
+        ctx.beginPath();
+        ctx.arc(px, py, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = "#D04E95";
+        ctx.fill();
+        
+        // Avanza mientras no se completa la vuelta
+        if (angle < 2 * Math.PI) {
+            angle += 0.02;
+            animationId = requestAnimationFrame(animate);
+        } else {
+            isAnimating = false;
+        }
+    }
+    
+    // Función de easing para suavizar la animación
+    function easeInOutQuad(t) {
+        return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+    }
+    
+    // Función para Mover y Cortar 1
+    function iniciarMoverYCortar1() {
+        if (!isAnimating) {
+            isAnimating = true;
+            trasladado1 = true;
+            animacionActual = 'trasladar1';
+            progresoAnimacion = 0;
+            moverCortarBtn1.disabled = true;
+            cancelAnimationFrame(animationId);
+            animateMoverYCortar1();
+        }
+    }
+    
+    // Animación de Mover y Cortar 1
+    function animateMoverYCortar1() {
+        if (progresoAnimacion < 1) {
+            const easedProgress = easeInOutQuad(progresoAnimacion);
+            
+            if (animacionActual === 'trasladar1') {
+                drawTraslado1(easedProgress);
+            } else {
+                drawCorte1(easedProgress);
+            }
+            
+            progresoAnimacion += velocidadAnimacion;
+            animationId = requestAnimationFrame(animateMoverYCortar1);
+        } else {
+            if (animacionActual === 'trasladar1') {
+                // Esperar 1 segundo y comenzar corte
+                setTimeout(() => {
+                    animacionActual = 'cortar1';
+                    segmentoCortado = true;
+                    progresoAnimacion = 0;
+                    animateMoverYCortar1();
+                }, 1000);
+            } else {
+                // Finalizar todo
+                isAnimating = false;
+                segmentoTrasladado = true;
+                drawFinalState1();
                 
-                // Dibujar diámetro inicial
-                drawDiameter(startX, baseY - r, 0);
+                // Habilitar Mover y Cortar 2
+                moverCortarBtn2.disabled = false;
             }
         }
+    }
+    
+    // Dibujar estado intermedio del traslado para Mover y Cortar 1
+    function drawTraslado1(progreso) {
+        ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+        const baseY = unrollCanvas.height / 2;
         
-        function resetCutSystem() {
+        // Línea base (piso)
+        ctx.beginPath();
+        ctx.moveTo(0, baseY);
+        ctx.lineTo(unrollCanvas.width, baseY);
+        ctx.strokeStyle = "#6D8A92";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        
+        // Dibujar la circunferencia
+        dibujarCircunferencia();
+        
+        // Dibujar diámetro
+        drawDiameter(startX + 2 * Math.PI * r, baseY - r, 0);
+        
+        // Calcular posiciones interpoladas
+        const startY = baseY;
+        const endY = baseY - r;
+        const currentY = startY + (endY - startY) * progreso;
+        
+        const startOffsetX = 0;
+        const endOffsetX = r;
+        const currentOffsetX = startOffsetX + (endOffsetX - startOffsetX) * progreso;
+        
+        // Dibujar el perímetro completo (siempre visible)
+        ctx.beginPath();
+        ctx.moveTo(startX + currentOffsetX, currentY);
+        ctx.lineTo(startX + 2 * Math.PI * r + currentOffsetX, currentY);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+    }
+    
+    // Dibujar estado durante el corte para Mover y Cortar 1
+    function drawCorte1(progreso) {
+        ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+        const baseY = unrollCanvas.height / 2;
+        
+        // Línea base (piso)
+        ctx.beginPath();
+        ctx.moveTo(0, baseY);
+        ctx.lineTo(unrollCanvas.width, baseY);
+        ctx.strokeStyle = "#6D8A92";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        
+        // Dibujar la circunferencia
+        dibujarCircunferencia();
+        
+        // Dibujar diámetro
+        drawDiameter(startX + 2 * Math.PI * r, baseY - r, 0);
+        
+        // Primer segmento (fijo)
+        ctx.beginPath();
+        ctx.moveTo(startX + r, baseY - r);
+        ctx.lineTo(startX + 2 * Math.PI * r - r, baseY - r);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Segundo segmento (en movimiento)
+        const segmentWidth = 2 * r;
+        
+        // Posición inicial del segmento 2
+        const startSeg2X = startX + 2 * Math.PI * r - r;
+        const endSeg2X = startX + 2 * Math.PI * r + r;
+        
+        // Posición final del segmento 2
+        const finalSeg2X = startX;
+        const finalSeg2Y = baseY - 160;
+        
+        // Posición actual interpolada
+        const currentSeg2X = startSeg2X + (finalSeg2X - startSeg2X) * progreso;
+        const currentSeg2Y = baseY - r + (finalSeg2Y - (baseY - r)) * progreso;
+        
+        ctx.beginPath();
+        ctx.moveTo(currentSeg2X, currentSeg2Y);
+        ctx.lineTo(currentSeg2X + segmentWidth, currentSeg2Y);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+    }
+    
+    // Dibujar estado final para Mover y Cortar 1
+    function drawFinalState1() {
+        ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+        const baseY = unrollCanvas.height / 2;
+        
+        // Línea base (piso)
+        ctx.beginPath();
+        ctx.moveTo(0, baseY);
+        ctx.lineTo(unrollCanvas.width, baseY);
+        ctx.strokeStyle = "#6D8A92";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        
+        // Dibujar la circunferencia
+        dibujarCircunferencia();
+        
+        // Dibujar diámetro
+        drawDiameter(startX + 2 * Math.PI * r, baseY - r, 0);
+        
+        // Dibujar el primer segmento
+        ctx.beginPath();
+        ctx.moveTo(startX + r, baseY - r);
+        ctx.lineTo(startX + 2 * Math.PI * r - r, baseY - r);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Dibujar el segundo segmento trasladado
+        ctx.beginPath();
+        ctx.moveTo(startX, baseY - 160);
+        ctx.lineTo(startX + 2 * r, baseY - 160);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+    }
+    
+    // Función para Mover y Cortar 2
+    function iniciarMoverYCortar2() {
+        if (!isAnimating && segmentoTrasladado) {
+            isAnimating = true;
+            trasladado2 = true;
+            animacionActual = 'trasladar2';
+            progresoAnimacion = 0;
+            moverCortarBtn2.disabled = true;
             cancelAnimationFrame(animationId);
-            cutsMade = 0;
-            remainingTape = 0;
-            segmentContainer.innerHTML = '';
-            allStepsCompleted = false;
-            isUnrolled = false;
+            animateMoverYCortar2();
         }
-        
-        function resetAnimation() {
-            resetCutSystem();
-            isAnimating = false;
-            angle = 0;
-            startBtn.disabled = false;
-            cutBtn.disabled = true;
-            circleSizeSlider.disabled = false;
-            cutBtn.textContent = `Cortar (0/${totalCuts})`;
-            drawStatic();
+    }
+    
+    // Animación de Mover y Cortar 2
+    function animateMoverYCortar2() {
+        if (progresoAnimacion < 1) {
+            const easedProgress = easeInOutQuad(progresoAnimacion);
+            
+            if (animacionActual === 'trasladar2') {
+                drawTraslado2(easedProgress);
+            } else {
+                drawCorte2(easedProgress);
+            }
+            
+            progresoAnimacion += velocidadAnimacion;
+            animationId = requestAnimationFrame(animateMoverYCortar2);
+        } else {
+            if (animacionActual === 'trasladar2') {
+                // Esperar 1 segundo y comenzar corte
+                setTimeout(() => {
+                    animacionActual = 'cortar2';
+                    segmentoCortado2 = true;
+                    progresoAnimacion = 0;
+                    animateMoverYCortar2();
+                }, 1000);
+            } else {
+                // Finalizar todo
+                isAnimating = false;
+                segmentoTrasladado2 = true;
+                drawFinalState2();
+                
+                // Habilitar Mover y Cortar 3
+                moverCortarBtn3.disabled = false;
+            }
         }
+    }
+    
+    // Dibujar estado intermedio del traslado para Mover y Cortar 2
+    function drawTraslado2(progreso) {
+        ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+        const baseY = unrollCanvas.height / 2;
         
-        // Inicializar la aplicación
-        init();
-    </script>
+        // Dibujar elementos estáticos
+        drawStaticElements();
+        
+        // Dibujar segmentos anteriores (de Mover y Cortar 1)
+        drawPreviousSegments1();
+        
+        // Segmento que se moverá (posición inicial)
+        const startSegX1 = startX + r;
+        const endSegX1 = startX + 2 * Math.PI * r - r;
+        
+        // Posición final del segmento (desplazado +2r)
+        const finalSegX1 = startX + 3 * r;
+        const finalSegX2 = startX + 2 * Math.PI * r + r;
+        
+        // Posición actual interpolada
+        const currentSegX1 = startSegX1 + (finalSegX1 - startSegX1) * progreso;
+        const currentSegX2 = endSegX1 + (finalSegX2 - endSegX1) * progreso;
+        
+        // Dibujar el segmento en movimiento
+        ctx.beginPath();
+        ctx.moveTo(currentSegX1, baseY - r);
+        ctx.lineTo(currentSegX2, baseY - r);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+    }
+    
+    // Dibujar estado durante el corte para Mover y Cortar 2
+    function drawCorte2(progreso) {
+        ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+        const baseY = unrollCanvas.height / 2;
+        
+        // Dibujar elementos estáticos
+        drawStaticElements();
+        
+        // Dibujar segmentos anteriores
+        drawPreviousSegments1();
+        
+        // Segmento principal (fijo después del movimiento)
+        ctx.beginPath();
+        ctx.moveTo(startX + 3 * r, baseY - r);
+        ctx.lineTo(startX + 2 * Math.PI * r - r, baseY - r);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Segmento pequeño (en movimiento)
+        const segmentWidth = 2 * r;
+        const startSegX = startX + 2 * Math.PI * r - r;
+        const endSegX = startX + 2 * Math.PI * r + r;
+        const finalSegX = startX;
+        const finalSegY = baseY - 150;
+        
+        const currentSegX = startSegX + (finalSegX - startSegX) * progreso;
+        const currentSegY = baseY - r + (finalSegY - (baseY - r)) * progreso;
+        
+        ctx.beginPath();
+        ctx.moveTo(currentSegX, currentSegY);
+        ctx.lineTo(currentSegX + segmentWidth, currentSegY);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+    }
+    
+    // Dibujar estado final para Mover y Cortar 2
+    function drawFinalState2() {
+        ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+        const baseY = unrollCanvas.height / 2;
+        
+        // Dibujar elementos estáticos
+        drawStaticElements();
+        
+        // Dibujar el primer segmento de Mover y Cortar 1
+        ctx.beginPath();
+        ctx.moveTo(startX + 3*r, baseY - r);
+        ctx.lineTo(startX + 2 * Math.PI * r - r, baseY - r);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Dibujar el segmento de Mover y Cortar 1 (trasladado)
+        ctx.beginPath();
+        ctx.moveTo(startX, baseY - 160);
+        ctx.lineTo(startX + 2 * r, baseY - 160);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Dibujar el segmento de Mover y Cortar 2 (trasladado)
+        ctx.beginPath();
+        ctx.moveTo(startX, baseY - 150);
+        ctx.lineTo(startX + 2 * r, baseY - 150);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+    }
+    
+    // Función para Mover y Cortar 3
+    function iniciarMoverYCortar3() {
+        if (!isAnimating && segmentoTrasladado2) {
+            isAnimating = true;
+            trasladado3_1 = true;
+            animacionActual = 'trasladar3_1';
+            progresoAnimacion = 0;
+            moverCortarBtn3.disabled = true;
+            cancelAnimationFrame(animationId);
+            animateMoverYCortar3();
+        }
+    }
+    
+    // Animación de Mover y Cortar 3
+    function animateMoverYCortar3() {
+        if (progresoAnimacion < 1) {
+            const easedProgress = easeInOutQuad(progresoAnimacion);
+            
+            switch(animacionActual) {
+                case 'trasladar3_1':
+                    drawTraslado3_1(easedProgress);
+                    break;
+                case 'cortar3_1':
+                    drawCorte3_1(easedProgress);
+                    break;
+                case 'trasladar3_2':
+                    drawTraslado3_2(easedProgress);
+                    break;
+                case 'cortar3_2':
+                    drawCorte3_2(easedProgress);
+                    break;
+            }
+            
+            progresoAnimacion += velocidadAnimacion;
+            animationId = requestAnimationFrame(animateMoverYCortar3);
+        } else {
+            switch(animacionActual) {
+                case 'trasladar3_1':
+                    setTimeout(() => {
+                        animacionActual = 'cortar3_1';
+                        segmentoCortado3_1 = true;
+                        progresoAnimacion = 0;
+                        animateMoverYCortar3();
+                    }, 1000);
+                    break;
+                case 'cortar3_1':
+                    setTimeout(() => {
+                        animacionActual = 'trasladar3_2';
+                        segmentoTrasladado3_1 = true;
+                        progresoAnimacion = 0;
+                        animateMoverYCortar3();
+                    }, 1000);
+                    break;
+                case 'trasladar3_2':
+                    setTimeout(() => {
+                        animacionActual = 'cortar3_2';
+                        segmentoCortado3_2 = true;
+                        progresoAnimacion = 0;
+                        animateMoverYCortar3();
+                    }, 1000);
+                    break;
+                case 'cortar3_2':
+                    isAnimating = false;
+                    segmentoTrasladado3_2 = true;
+                    allStepsCompleted = true;
+                    drawFinalState3();
+                    
+                    // Habilitar controles finales
+                    circleSizeSlider.disabled = false;
+                    nextBtn.disabled = false;
+                    break;
+            }
+        }
+    }
+    
+    // Funciones de dibujo para Mover y Cortar 3
+    function drawTraslado3_1(progreso) {
+        ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+        const baseY = unrollCanvas.height / 2;
+        
+        // Dibujar elementos estáticos
+        drawStaticElements();
+        
+        // Dibujar todos los segmentos anteriores
+        drawPreviousSegments2();
+        
+        // Segmento que se moverá (posición inicial)
+        const startSegX1 = startX + 3 * r;
+        const endSegX1 = startX + 2 * Math.PI * r - r;
+        
+        // Posición final del segmento (desplazado +2r)
+        const finalSegX1 = startX + 5 * r;
+        const finalSegX2 = startX + 2 * Math.PI * r + r;
+        
+        // Posición actual interpolada
+        const currentSegX1 = startSegX1 + (finalSegX1 - startSegX1) * progreso;
+        const currentSegX2 = endSegX1 + (finalSegX2 - endSegX1) * progreso;
+        
+        // Dibujar el segmento en movimiento
+        ctx.beginPath();
+        ctx.moveTo(currentSegX1, baseY - r);
+        ctx.lineTo(currentSegX2, baseY - r);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+    }
+    
+    function drawCorte3_1(progreso) {
+        ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+        const baseY = unrollCanvas.height / 2;
+        
+        // Dibujar elementos estáticos
+        drawStaticElements();
+        
+        // Dibujar todos los segmentos anteriores
+        drawPreviousSegments2();
+        
+        // Segmento principal (fijo después del movimiento)
+        ctx.beginPath();
+        ctx.moveTo(startX + 5 * r, baseY - r);
+        ctx.lineTo(startX + 2 * Math.PI * r - r, baseY - r);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Segmento pequeño (en movimiento)
+        const segmentWidth = 2 * r;
+        const startSegX = startX + 2 * Math.PI * r - r;
+        const endSegX = startX + 2 * Math.PI * r + r;
+        const finalSegX = startX;
+        const finalSegY = baseY - 140;
+        
+        const currentSegX = startSegX + (finalSegX - startSegX) * progreso;
+        const currentSegY = baseY - r + (finalSegY - (baseY - r)) * progreso;
+        
+        ctx.beginPath();
+        ctx.moveTo(currentSegX, currentSegY);
+        ctx.lineTo(currentSegX + segmentWidth, currentSegY);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+    }
+    
+    function drawTraslado3_2(progreso) {
+        ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+        const baseY = unrollCanvas.height / 2;
+        
+        // Dibujar elementos estáticos
+        drawStaticElements();
+        
+        // Dibujar todos los segmentos anteriores
+        drawPreviousSegments2();
+        
+        // Dibujar el segmento pequeño de Mover y Cortar 3 (ya en posición final)
+        ctx.beginPath();
+        ctx.moveTo(startX, baseY - 140);
+        ctx.lineTo(startX + 2 * r, baseY - 140);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Segmento que se moverá (posición inicial)
+        const startSegX1 = startX + 5 * r;
+        const endSegX1 = startX + 2 * Math.PI * r - r;
+        
+        // Posición final del segmento (desplazado +2r)
+        const finalSegX1 = startX + 7 * r;
+        const finalSegX2 = startX + 2 * Math.PI * r + r;
+        
+        // Posición actual interpolada
+        const currentSegX1 = startSegX1 + (finalSegX1 - startSegX1) * progreso;
+        const currentSegX2 = endSegX1 + (finalSegX2 - endSegX1) * progreso;
+        
+        // Dibujar el segmento en movimiento
+        ctx.beginPath();
+        ctx.moveTo(currentSegX2, baseY - r);
+        ctx.lineTo(currentSegX1, baseY - r);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+    }
+    
+    function drawCorte3_2(progreso) {
+        ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+        const baseY = unrollCanvas.height / 2;
+        
+        // Dibujar elementos estáticos
+        drawStaticElements();
+        
+        // Dibujar todos los segmentos anteriores
+        drawPreviousSegments2();
+        
+        // Dibujar el segmento pequeño de Mover y Cortar 3 (fijo)
+        ctx.beginPath();
+        ctx.moveTo(startX, baseY - 140);
+        ctx.lineTo(startX + 2 * r, baseY - 140);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Segmento principal (en movimiento)
+        const segmentLength = 2 * Math.PI * r - 6 * r;
+        const startSegX1 = startX + 7 * r;
+        const endSegX1 = startX + 2 * Math.PI * r - r;
+        const finalSegX1 = startX;
+        const finalSegY = baseY - 130;
+        
+        const currentSegX1 = startSegX1 + (finalSegX1 - startSegX1) * progreso;
+        const currentSegY = baseY - r + (finalSegY - (baseY - r)) * progreso;
+        
+        ctx.beginPath();
+        ctx.moveTo(currentSegX1, currentSegY);
+        ctx.lineTo(currentSegX1 + segmentLength, currentSegY);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+    }
+    
+    function drawFinalState3() {
+        ctx.clearRect(0, 0, unrollCanvas.width, unrollCanvas.height);
+        const baseY = unrollCanvas.height / 2;
+        
+        // Dibujar elementos estáticos
+        drawStaticElements();
+        
+        // Dibujar todos los segmentos en sus posiciones finales
+        // Segmento de Mover y Cortar 1
+        ctx.beginPath();
+        ctx.moveTo(startX, baseY - 160);
+        ctx.lineTo(startX + 2 * r, baseY - 160);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Segmento de Mover y Cortar 2
+        ctx.beginPath();
+        ctx.moveTo(startX, baseY - 150);
+        ctx.lineTo(startX + 2 * r, baseY - 150);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Primer segmento de Mover y Cortar 3
+        ctx.beginPath();
+        ctx.moveTo(startX, baseY - 140);
+        ctx.lineTo(startX + 2 * r, baseY - 140);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Segundo segmento de Mover y Cortar 3
+        ctx.beginPath();
+        ctx.moveTo(startX, baseY - 130);
+        ctx.lineTo(startX + 2 * Math.PI * r - 6 * r, baseY - 130);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+    }
+    
+    // Funciones auxiliares para dibujar elementos comunes
+    function drawStaticElements() {
+        const baseY = unrollCanvas.height / 2;
+        
+        // Línea base (piso)
+        ctx.beginPath();
+        ctx.moveTo(0, baseY);
+        ctx.lineTo(unrollCanvas.width, baseY);
+        ctx.strokeStyle = "#6D8A92";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        
+        // Dibujar la circunferencia
+        dibujarCircunferencia();
+        
+        // Dibujar diámetro
+        drawDiameter(startX + 2 * Math.PI * r, baseY - r, 0);
+    }
+    
+    function drawPreviousSegments1() {
+        const baseY = unrollCanvas.height / 2;
+        
+        // Segmento de Mover y Cortar 1 (trasladado)
+        if (segmentoTrasladado) {
+            ctx.beginPath();
+            ctx.moveTo(startX, baseY - 160);
+            ctx.lineTo(startX + 2 * r, baseY - 160);
+            ctx.strokeStyle = "#EAC148";
+            ctx.lineWidth = 8;
+            ctx.stroke();
+        }
+    }
+    
+    function drawPreviousSegments2() {
+        const baseY = unrollCanvas.height / 2;
+        
+        // Segmento de Mover y Cortar 1 (trasladado)
+        ctx.beginPath();
+        ctx.moveTo(startX, baseY - 160);
+        ctx.lineTo(startX + 2 * r, baseY - 160);
+        ctx.strokeStyle = "#EAC148";
+        ctx.lineWidth = 8;
+        ctx.stroke();
+        
+        // Segmento de Mover y Cortar 2 (si está completo)
+        if (segmentoTrasladado2) {
+            ctx.beginPath();
+            ctx.moveTo(startX, baseY - 150);
+            ctx.lineTo(startX + 2 * r, baseY - 150);
+            ctx.strokeStyle = "#EAC148";
+            ctx.lineWidth = 8;
+            ctx.stroke();
+        }
+    }
+    
+    // Reiniciar animación
+    function resetAnimation() {
+        cancelAnimationFrame(animationId);
+        isAnimating = false;
+        animacionActual = null;
+        angle = 0;
+        allStepsCompleted = false;
+        trasladado1 = false;
+        segmentoCortado = false;
+        segmentoTrasladado = false;
+        trasladado2 = false;
+        segmentoCortado2 = false;
+        segmentoTrasladado2 = false;
+        trasladado3_1 = false;
+        segmentoCortado3_1 = false;
+        segmentoTrasladado3_1 = false;
+        trasladado3_2 = false;
+        segmentoCortado3_2 = false;
+        segmentoTrasladado3_2 = false;
+        resetButtonStates();
+        drawStatic();
+    }
+    
+    // Inicializar la aplicación
+    init();
+</script>
 </body>
 </html>
