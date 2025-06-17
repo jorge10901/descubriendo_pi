@@ -58,6 +58,42 @@
         color: #2A6574;
     }
 
+    /* Botón Empezar */
+    .empezar-btn {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 30px;
+        border: none;
+        border-radius: 5px;
+        background-color: #2A6574;
+        color: white;
+        cursor: pointer;
+        font-size: 18px;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 500;
+        transition: background-color 0.3s;
+        z-index: 100;
+    }
+
+    .empezar-btn:hover {
+        background-color: #1e4d5a;
+        transform: translateX(-50%) translateY(-2px);
+    }
+
+    /* Ocultar controles de navegación en la primera diapositiva */
+    .portada ~ .controles {
+        display: none;
+    }
+
+    /* Mostrar controles de navegación desde la segunda diapositiva */
+    .informacion ~ .controles,
+    .circunferencias ~ .controles,
+    .conclusion ~ .controles {
+        display: flex;
+    }
+
     /* Diapositiva de información */
     .informacion {
         background-color: #F7FDFF;
@@ -209,17 +245,26 @@
         margin-bottom: 15px;
     }
 
-    /* Navegación */
-    .controles {
-        position: fixed;
-        bottom: 20px;
-        left: 0;
-        right: 0;
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        z-index: 100;
-    }
+/* Navegación */
+.controles {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    display: none; /* Ocultos por defecto */
+    justify-content: center;
+    gap: 20px;
+    z-index: 100;
+}
+
+/* Mostrar controles solo cuando no sea la primera diapositiva */
+.diapositiva.portada.activa ~ .controles {
+    display: none !important;
+}
+
+.diapositiva:not(.portada).activa ~ .controles {
+    display: flex;
+}
 
     .nav-btn {
         padding: 10px 20px;
@@ -256,6 +301,12 @@
             font-size: 1.2em;
         }
         
+        .empezar-btn {
+            padding: 10px 25px;
+            font-size: 16px;
+            bottom: 30px;
+        }
+        
         .animation-container {
             height: 300px;
         }
@@ -285,6 +336,12 @@
     }
 
     @media (max-width: 480px) {
+        .empezar-btn {
+            padding: 8px 20px;
+            font-size: 14px;
+            bottom: 25px;
+        }
+        
         .controls {
             bottom: 100px;
             gap: 10px;
@@ -302,6 +359,7 @@
         <div class="diapositiva portada activa">
             <h1>Descubriendo el número π</h1>
             <p>Una actividad interactiva para entender la relación entre la circunferencia y el diámetro</p>
+            <button id="empezarBtn" class="empezar-btn">Empezar</button>
         </div>
         
         <!-- Información -->
@@ -337,9 +395,7 @@
                     </div>
                     
                     <button id="startBtn" class="action-btn">Comenzar desenrollado</button>
-                    <button id="moverCortarBtn1" class="action-btn" disabled>Mover y Cortar 1</button>
-                    <button id="moverCortarBtn2" class="action-btn" disabled>Mover y Cortar 2</button>
-                    <button id="moverCortarBtn3" class="action-btn" disabled>Mover y Cortar 3</button>
+                    <button id="cortesBtn" class="action-btn" disabled>Cortes 0/3</button>
                 </div>
               </div>
           </div>
@@ -371,12 +427,11 @@
     const diapositivas = document.querySelectorAll('.diapositiva');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
+    const empezarBtn = document.getElementById('empezarBtn');
     const unrollCanvas = document.getElementById('unrollCanvas');
     const circleSizeSlider = document.getElementById('circleSize');
     const startBtn = document.getElementById('startBtn');
-    const moverCortarBtn1 = document.getElementById('moverCortarBtn1');
-    const moverCortarBtn2 = document.getElementById('moverCortarBtn2');
-    const moverCortarBtn3 = document.getElementById('moverCortarBtn3');
+    const cortesBtn = document.getElementById('cortesBtn');
     
     // Variables de estado
     let diapositivaActual = 0;
@@ -420,22 +475,43 @@
     function addEventListeners() {
         prevBtn.addEventListener('click', prevDiapositiva);
         nextBtn.addEventListener('click', nextDiapositiva);
+        empezarBtn.addEventListener('click', nextDiapositiva);
         circleSizeSlider.addEventListener('input', handleSizeChange);
         startBtn.addEventListener('click', startAnimation);
-        moverCortarBtn1.addEventListener('click', iniciarMoverYCortar1);
-        moverCortarBtn2.addEventListener('click', iniciarMoverYCortar2);
-        moverCortarBtn3.addEventListener('click', iniciarMoverYCortar3);
+        cortesBtn.addEventListener('click', manejarCorte);
         window.addEventListener('resize', resizeCanvas);
     }
     
     // Control de estados de los botones
     function resetButtonStates() {
         startBtn.disabled = false;
-        moverCortarBtn1.disabled = true;
-        moverCortarBtn2.disabled = true;
-        moverCortarBtn3.disabled = true;
+        cortesBtn.disabled = true;
         circleSizeSlider.disabled = false;
         nextBtn.disabled = diapositivaActual === 2 && !allStepsCompleted;
+        
+        // Actualizar texto del botón según el estado
+        if (!trasladado1) {
+            cortesBtn.textContent = 'Cortes 0/3';
+        } else if (!segmentoTrasladado2) {
+            cortesBtn.textContent = 'Cortes 1/3';
+        } else if (!segmentoTrasladado3_2) {
+            cortesBtn.textContent = 'Cortes 2/3';
+        } else {
+            cortesBtn.textContent = 'Cortes 3/3';
+        }
+    }
+    
+    // Manejar el botón de cortes
+    function manejarCorte() {
+        if (!isAnimating) {
+            if (!trasladado1) {
+                iniciarMoverYCortar1();
+            } else if (!segmentoTrasladado2) {
+                iniciarMoverYCortar2();
+            } else if (!segmentoTrasladado3_2) {
+                iniciarMoverYCortar3();
+            }
+        }
     }
     
     // Navegación entre diapositivas
@@ -473,23 +549,26 @@
     }
     
     function showDiapositiva(index) {
-        diapositivas.forEach((diapositiva, i) => {
-            if (i === index) {
-                diapositiva.classList.add('activa');
-                
-                if (i === 2) {
-                    resetAnimation();
-                }
-            } else {
-                diapositiva.classList.remove('activa');
+    diapositivas.forEach((diapositiva, i) => {
+        if (i === index) {
+            diapositiva.classList.add('activa');
+            
+            if (i === 2) {
+                resetAnimation();
             }
-        });
-    }
+        } else {
+            diapositiva.classList.remove('activa');
+        }
+    });
+    
+    updateNavButtons(); // Asegurarse de actualizar el estado de los botones
+}
     
     // Manejar cambio de tamaño del círculo
     function handleSizeChange() {
         r = parseInt(circleSizeSlider.value);
         resetAnimation();
+        resetButtonStates();
     }
     
     // Redimensionar canvas
@@ -570,7 +649,7 @@
         circleSizeSlider.disabled = true;
         
         // Habilitar siguiente paso
-        moverCortarBtn1.disabled = false;
+        cortesBtn.disabled = false;
         
         cancelAnimationFrame(animationId);
         animate();
@@ -660,7 +739,7 @@
             trasladado1 = true;
             animacionActual = 'trasladar1';
             progresoAnimacion = 0;
-            moverCortarBtn1.disabled = true;
+            cortesBtn.disabled = true;
             cancelAnimationFrame(animationId);
             animateMoverYCortar1();
         }
@@ -694,8 +773,9 @@
                 segmentoTrasladado = true;
                 drawFinalState1();
                 
-                // Habilitar Mover y Cortar 2
-                moverCortarBtn2.disabled = false;
+                // Actualizar botón de cortes
+                cortesBtn.textContent = 'Cortes 1/3';
+                cortesBtn.disabled = false;
             }
         }
     }
@@ -773,7 +853,7 @@
         
         // Posición final del segmento 2
         const finalSeg2X = startX;
-        const finalSeg2Y = baseY - 160;
+        const finalSeg2Y = baseY - 170;
         
         // Posición actual interpolada
         const currentSeg2X = startSeg2X + (finalSeg2X - startSeg2X) * progreso;
@@ -816,8 +896,8 @@
         
         // Dibujar el segundo segmento trasladado
         ctx.beginPath();
-        ctx.moveTo(startX, baseY - 160);
-        ctx.lineTo(startX + 2 * r, baseY - 160);
+        ctx.moveTo(startX, baseY - 170);
+        ctx.lineTo(startX + 2 * r, baseY - 170);
         ctx.strokeStyle = "#EAC148";
         ctx.lineWidth = 8;
         ctx.stroke();
@@ -830,7 +910,7 @@
             trasladado2 = true;
             animacionActual = 'trasladar2';
             progresoAnimacion = 0;
-            moverCortarBtn2.disabled = true;
+            cortesBtn.disabled = true;
             cancelAnimationFrame(animationId);
             animateMoverYCortar2();
         }
@@ -864,8 +944,9 @@
                 segmentoTrasladado2 = true;
                 drawFinalState2();
                 
-                // Habilitar Mover y Cortar 3
-                moverCortarBtn3.disabled = false;
+                // Actualizar botón de cortes
+                cortesBtn.textContent = 'Cortes 2/3';
+                cortesBtn.disabled = false;
             }
         }
     }
@@ -957,8 +1038,8 @@
         
         // Dibujar el segmento de Mover y Cortar 1 (trasladado)
         ctx.beginPath();
-        ctx.moveTo(startX, baseY - 160);
-        ctx.lineTo(startX + 2 * r, baseY - 160);
+        ctx.moveTo(startX, baseY - 170);
+        ctx.lineTo(startX + 2 * r, baseY - 170);
         ctx.strokeStyle = "#EAC148";
         ctx.lineWidth = 8;
         ctx.stroke();
@@ -979,7 +1060,7 @@
             trasladado3_1 = true;
             animacionActual = 'trasladar3_1';
             progresoAnimacion = 0;
-            moverCortarBtn3.disabled = true;
+            cortesBtn.disabled = true;
             cancelAnimationFrame(animationId);
             animateMoverYCortar3();
         }
@@ -1038,6 +1119,10 @@
                     segmentoTrasladado3_2 = true;
                     allStepsCompleted = true;
                     drawFinalState3();
+                    
+                    // Actualizar botón de cortes
+                    cortesBtn.textContent = 'Cortes 3/3';
+                    cortesBtn.disabled = true;
                     
                     // Habilitar controles finales
                     circleSizeSlider.disabled = false;
@@ -1102,7 +1187,7 @@
         const startSegX = startX + 2 * Math.PI * r - r;
         const endSegX = startX + 2 * Math.PI * r + r;
         const finalSegX = startX;
-        const finalSegY = baseY - 140;
+        const finalSegY = baseY - 130;
         
         const currentSegX = startSegX + (finalSegX - startSegX) * progreso;
         const currentSegY = baseY - r + (finalSegY - (baseY - r)) * progreso;
@@ -1127,8 +1212,8 @@
         
         // Dibujar el segmento pequeño de Mover y Cortar 3 (ya en posición final)
         ctx.beginPath();
-        ctx.moveTo(startX, baseY - 140);
-        ctx.lineTo(startX + 2 * r, baseY - 140);
+        ctx.moveTo(startX, baseY - 130);
+        ctx.lineTo(startX + 2 * r, baseY - 130);
         ctx.strokeStyle = "#EAC148";
         ctx.lineWidth = 8;
         ctx.stroke();
@@ -1166,8 +1251,8 @@
         
         // Dibujar el segmento pequeño de Mover y Cortar 3 (fijo)
         ctx.beginPath();
-        ctx.moveTo(startX, baseY - 140);
-        ctx.lineTo(startX + 2 * r, baseY - 140);
+        ctx.moveTo(startX, baseY - 130);
+        ctx.lineTo(startX + 2 * r, baseY - 130);
         ctx.strokeStyle = "#EAC148";
         ctx.lineWidth = 8;
         ctx.stroke();
@@ -1177,7 +1262,7 @@
         const startSegX1 = startX + 7 * r;
         const endSegX1 = startX + 2 * Math.PI * r - r;
         const finalSegX1 = startX;
-        const finalSegY = baseY - 130;
+        const finalSegY = baseY - 110;
         
         const currentSegX1 = startSegX1 + (finalSegX1 - startSegX1) * progreso;
         const currentSegY = baseY - r + (finalSegY - (baseY - r)) * progreso;
@@ -1200,8 +1285,8 @@
         // Dibujar todos los segmentos en sus posiciones finales
         // Segmento de Mover y Cortar 1
         ctx.beginPath();
-        ctx.moveTo(startX, baseY - 160);
-        ctx.lineTo(startX + 2 * r, baseY - 160);
+        ctx.moveTo(startX, baseY - 170);
+        ctx.lineTo(startX + 2 * r, baseY - 170);
         ctx.strokeStyle = "#EAC148";
         ctx.lineWidth = 8;
         ctx.stroke();
@@ -1216,16 +1301,16 @@
         
         // Primer segmento de Mover y Cortar 3
         ctx.beginPath();
-        ctx.moveTo(startX, baseY - 140);
-        ctx.lineTo(startX + 2 * r, baseY - 140);
+        ctx.moveTo(startX, baseY - 130);
+        ctx.lineTo(startX + 2 * r, baseY - 130);
         ctx.strokeStyle = "#EAC148";
         ctx.lineWidth = 8;
         ctx.stroke();
         
         // Segundo segmento de Mover y Cortar 3
         ctx.beginPath();
-        ctx.moveTo(startX, baseY - 130);
-        ctx.lineTo(startX + 2 * Math.PI * r - 6 * r, baseY - 130);
+        ctx.moveTo(startX, baseY - 110);
+        ctx.lineTo(startX + 2 * Math.PI * r - 6 * r, baseY - 110);
         ctx.strokeStyle = "#EAC148";
         ctx.lineWidth = 8;
         ctx.stroke();
@@ -1256,8 +1341,8 @@
         // Segmento de Mover y Cortar 1 (trasladado)
         if (segmentoTrasladado) {
             ctx.beginPath();
-            ctx.moveTo(startX, baseY - 160);
-            ctx.lineTo(startX + 2 * r, baseY - 160);
+            ctx.moveTo(startX, baseY - 170);
+            ctx.lineTo(startX + 2 * r, baseY - 170);
             ctx.strokeStyle = "#EAC148";
             ctx.lineWidth = 8;
             ctx.stroke();
@@ -1269,8 +1354,8 @@
         
         // Segmento de Mover y Cortar 1 (trasladado)
         ctx.beginPath();
-        ctx.moveTo(startX, baseY - 160);
-        ctx.lineTo(startX + 2 * r, baseY - 160);
+        ctx.moveTo(startX, baseY - 170);
+        ctx.lineTo(startX + 2 * r, baseY - 170);
         ctx.strokeStyle = "#EAC148";
         ctx.lineWidth = 8;
         ctx.stroke();
