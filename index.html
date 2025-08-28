@@ -355,73 +355,91 @@
 </head>
 <body>
     <div class="presentacion">
-        <!-- Portada -->
-        <div class="diapositiva portada activa">
-            <h1>Descubriendo el número π</h1>
-            <p><br>Proyecto EVEPRIM</p>
-            <p>Elaborado por: Jorge Mejías Salas</p>
-            <button id="empezarBtn" class="empezar-btn">Empezar</button>
-        </div>
-        
-        <!-- Información -->
-        <div class="diapositiva informacion">
-            <div class="contenido">
-                <h2>Objetivo de la actividad:</h2>
-                <p>En esta actividad interactiva, aproximará el valor de π midiendo perímetros y diámetros de diferentes circunferencias.</p>
-                
-                <h3>¿Cómo funciona?</h3>
-                <ol>
-                    <li>Observará una circunferencia con su diámetro.</li>
-                    <li>"Desenrollará" la circunferencia en una línea recta.</li>
-                    <li>Cortará la circunferencia con la medida del diametro.</li>
-                    <li>Descubrirá una relación interesante.</li>
-                </ol>
-            </div>
-        </div>
-        
-        <!-- Circunferencias interactivas -->
-        <div class="diapositiva circunferencias">
-            <div class="circunferencias">
-              <div class="contenido">
-                  <h2>Explore la relación entre circunferencia y diámetro</h2>
-                  
-                  <div class="animation-container">
-                      <canvas id="unrollCanvas"></canvas>
-                  </div>
-                  
-                  <div class="controls">
-                    <div class="slider-container">
-                        <label for="circleSize">Tamaño de la circunferencia:</label>
-                        <input type="range" id="circleSize" min="30" max="80" value="60">
-                    </div>
-                    
-                    <button id="startBtn" class="action-btn">Comenzar desenrollado</button>
-                    <button id="cortesBtn" class="action-btn" disabled>Cortes 0/3</button>
-                </div>
-              </div>
-          </div>
-        </div>
-        
-        <!-- Conclusión -->
-        <div class="diapositiva conclusion">
-            <div class="contenido">
-                <h2>¡Has descubierto π!</h2>
-                
-                <div class="formula">C = π × D</div>
-                
-                <div class="explicacion">
-                    <p>No importa el tamaño del círculo que use, siempre encontrará que la circunferencia (C) es aproximadamente 3.14 veces más larga que el diámetro (D).</p>
-                    <p>Esta relación constante es lo que llamamos π (pi), un número fundamental en matemáticas que aparece en muchas fórmulas relacionadas con círculos.</p>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Controles de navegación -->
-        <div class="controles">
-            <button id="prevBtn" class="nav-btn">Anterior</button>
-            <button id="nextBtn" class="nav-btn">Siguiente</button>
+    <!-- Portada -->
+    <div class="diapositiva portada activa">
+        <h1>Descubriendo el número π</h1>
+        <p><br>Proyecto EVEPRIM</p>
+        <p>Elaborado por: Jorge Mejías Salas</p>
+        <button id="empezarBtn" class="empezar-btn">Empezar</button>
+    </div>
+    
+    <!-- Información -->
+    <div class="diapositiva informacion">
+        <div class="contenido">
+            <h2>Objetivo de la actividad:</h2>
+            <p>En esta actividad interactiva, aproximará el valor de π midiendo perímetros y diámetros de diferentes circunferencias.</p>
+            
+            <h3>¿Cómo funciona?</h3>
+            <ol>
+                <li>Observará una circunferencia con su diámetro.</li>
+                <li>Puede cambiar el tamaño de la circunferencia a su antojo utilizando el <strong>"deslizador"</strong> que se presenta.</li>
+                <li>Deberá dar clic en el botón <strong>"Comenzar desenrollado"</strong> para ver cómo se desenrolla la circunferencia.</li>
+                <li>Luego, debe dar clic en el botón <strong>"Cortes"</strong> hasta que este quede deshabilitado.</li>
+                <li>Al completar los pasos anteriores podrá observar la relación entre la longitud de la circunferencia y el diámetro.</li>
+            </ol>
         </div>
     </div>
+    
+    <!-- Circunferencias interactivas -->
+    <div class="diapositiva circunferencias">
+        <div class="circunferencias">
+          <div class="contenido">
+              <h2>Explore la relación entre circunferencia y diámetro</h2>
+              
+              <div class="animation-container">
+                  <canvas id="unrollCanvas"></canvas>
+              </div>
+              
+              <div class="controls">
+                <div class="slider-container">
+                    <label for="circleSize">Tamaño de la circunferencia:</label>
+                    <input type="range" id="circleSize" min="42" max="92" value="60">
+                </div>
+                
+                <button id="startBtn" class="action-btn">Comenzar desenrollado</button>
+                <button id="cortesBtn" class="action-btn" disabled>Cortes 0/3</button>
+            </div>
+          </div>
+      </div>
+    </div>
+    
+    <!-- Nueva diapositiva: Explicación de la relación -->
+    <div class="diapositiva informacion">
+        <div class="contenido">
+            <h2>Relación entre circunferencia y diámetro</h2>
+            
+            <div class="explicacion">
+                <p>Como ha observado en la animación anterior, al desenrollar la circunferencia, su longitud es equivalente a <strong>tres diámetros y un poquito más</strong>.</p>
+                <p>Esta relación constante entre la longitud de la circunferencia (C) y su diámetro (D) es lo que conocemos como el número π (pi).</p>
+                <p>Matemáticamente, esto se expresa como:</p>
+            </div>
+            
+            <div class="formula">C = π × D</div>
+            
+            <div class="explicacion">
+                <p>Puede volver a la diapositiva anterior y ver que esto también ocurre aunque cambie el tamaño de la circunferencia.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Conclusión -->
+    <div class="diapositiva conclusion">
+        <div class="contenido">
+            <h2>¡Has descubierto π!</h2>
+            
+            <div class="explicacion">
+                <p>No importa el tamaño del círculo que use, siempre encontrará que la circunferencia es aproximadamente 3,14 veces más larga que el diámetro.</p>
+                <p>Esta relación constante es lo que llamamos π (pi), un número fundamental en matemáticas que aparece en muchas fórmulas relacionadas con círculos.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Controles de navegación -->
+    <div class="controles">
+        <button id="prevBtn" class="nav-btn">Anterior</button>
+        <button id="nextBtn" class="nav-btn">Siguiente</button>
+    </div>
+</div>
     
 <script>
     // Elementos del DOM
@@ -585,7 +603,7 @@
         ctx.beginPath();
         ctx.arc(startX + 2 * Math.PI * r, baseY - r, r, 0, 2 * Math.PI);
         ctx.strokeStyle = "#2A6574";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
     }
     
@@ -607,7 +625,7 @@
         ctx.beginPath();
         ctx.arc(startX, baseY - r, r, 0, 2 * Math.PI);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Dibujar diámetro inicial
@@ -684,7 +702,7 @@
             ctx.beginPath();
             ctx.arc(cx, cy, r, Math.PI/2, Math.PI/2 + angle, false);
             ctx.strokeStyle = "#2A6574";
-            ctx.lineWidth = 8;
+            ctx.lineWidth = r/10;
             ctx.stroke();
         }
         
@@ -693,7 +711,7 @@
             ctx.beginPath();
             ctx.arc(cx, cy, r, Math.PI/2 + angle, Math.PI/2, false);
             ctx.strokeStyle = "#EAC148";
-            ctx.lineWidth = 8;
+            ctx.lineWidth = r/10;
             ctx.stroke();
         }
         
@@ -702,7 +720,7 @@
         ctx.moveTo(startX, baseY);
         ctx.lineTo(startX + r * angle, baseY);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Radio al punto rosa
@@ -814,7 +832,7 @@
         ctx.moveTo(startX + currentOffsetX, currentY);
         ctx.lineTo(startX + 2 * Math.PI * r + currentOffsetX, currentY);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
     }
     
@@ -842,7 +860,7 @@
         ctx.moveTo(startX + r, baseY - r);
         ctx.lineTo(startX + 2 * Math.PI * r - r, baseY - r);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Segundo segmento (en movimiento)
@@ -864,7 +882,7 @@
         ctx.moveTo(currentSeg2X, currentSeg2Y);
         ctx.lineTo(currentSeg2X + segmentWidth, currentSeg2Y);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
     }
     
@@ -892,7 +910,7 @@
         ctx.moveTo(startX + r, baseY - r);
         ctx.lineTo(startX + 2 * Math.PI * r - r, baseY - r);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Dibujar el segundo segmento trasladado
@@ -900,7 +918,7 @@
         ctx.moveTo(startX, baseY - 170);
         ctx.lineTo(startX + 2 * r, baseY - 170);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
     }
     
@@ -980,7 +998,7 @@
         ctx.moveTo(currentSegX1, baseY - r);
         ctx.lineTo(currentSegX2, baseY - r);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
     }
     
@@ -1000,7 +1018,7 @@
         ctx.moveTo(startX + 3 * r, baseY - r);
         ctx.lineTo(startX + 2 * Math.PI * r - r, baseY - r);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Segmento pequeño (en movimiento)
@@ -1017,7 +1035,7 @@
         ctx.moveTo(currentSegX, currentSegY);
         ctx.lineTo(currentSegX + segmentWidth, currentSegY);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
     }
     
@@ -1034,7 +1052,7 @@
         ctx.moveTo(startX + 3*r, baseY - r);
         ctx.lineTo(startX + 2 * Math.PI * r - r, baseY - r);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Dibujar el segmento de Mover y Cortar 1 (trasladado)
@@ -1042,7 +1060,7 @@
         ctx.moveTo(startX, baseY - 170);
         ctx.lineTo(startX + 2 * r, baseY - 170);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Dibujar el segmento de Mover y Cortar 2 (trasladado)
@@ -1050,7 +1068,7 @@
         ctx.moveTo(startX, baseY - 150);
         ctx.lineTo(startX + 2 * r, baseY - 150);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
     }
     
@@ -1161,7 +1179,7 @@
         ctx.moveTo(currentSegX1, baseY - r);
         ctx.lineTo(currentSegX2, baseY - r);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
     }
     
@@ -1180,7 +1198,7 @@
         ctx.moveTo(startX + 5 * r, baseY - r);
         ctx.lineTo(startX + 2 * Math.PI * r - r, baseY - r);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Segmento pequeño (en movimiento)
@@ -1197,7 +1215,7 @@
         ctx.moveTo(currentSegX, currentSegY);
         ctx.lineTo(currentSegX + segmentWidth, currentSegY);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
     }
     
@@ -1216,7 +1234,7 @@
         ctx.moveTo(startX, baseY - 130);
         ctx.lineTo(startX + 2 * r, baseY - 130);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Segmento que se moverá (posición inicial)
@@ -1236,7 +1254,7 @@
         ctx.moveTo(currentSegX2, baseY - r);
         ctx.lineTo(currentSegX1, baseY - r);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
     }
     
@@ -1255,7 +1273,7 @@
         ctx.moveTo(startX, baseY - 130);
         ctx.lineTo(startX + 2 * r, baseY - 130);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Segmento principal (en movimiento)
@@ -1272,7 +1290,7 @@
         ctx.moveTo(currentSegX1, currentSegY);
         ctx.lineTo(currentSegX1 + segmentLength, currentSegY);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
     }
     
@@ -1289,7 +1307,7 @@
         ctx.moveTo(startX, baseY - 170);
         ctx.lineTo(startX + 2 * r, baseY - 170);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Segmento de Mover y Cortar 2
@@ -1297,7 +1315,7 @@
         ctx.moveTo(startX, baseY - 150);
         ctx.lineTo(startX + 2 * r, baseY - 150);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Primer segmento de Mover y Cortar 3
@@ -1305,7 +1323,7 @@
         ctx.moveTo(startX, baseY - 130);
         ctx.lineTo(startX + 2 * r, baseY - 130);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Segundo segmento de Mover y Cortar 3
@@ -1313,7 +1331,7 @@
         ctx.moveTo(startX, baseY - 110);
         ctx.lineTo(startX + 2 * Math.PI * r - 6 * r, baseY - 110);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
     }
     
@@ -1345,7 +1363,7 @@
             ctx.moveTo(startX, baseY - 170);
             ctx.lineTo(startX + 2 * r, baseY - 170);
             ctx.strokeStyle = "#EAC148";
-            ctx.lineWidth = 8;
+            ctx.lineWidth = r/10;
             ctx.stroke();
         }
     }
@@ -1358,7 +1376,7 @@
         ctx.moveTo(startX, baseY - 170);
         ctx.lineTo(startX + 2 * r, baseY - 170);
         ctx.strokeStyle = "#EAC148";
-        ctx.lineWidth = 8;
+        ctx.lineWidth = r/10;
         ctx.stroke();
         
         // Segmento de Mover y Cortar 2 (si está completo)
@@ -1367,7 +1385,7 @@
             ctx.moveTo(startX, baseY - 150);
             ctx.lineTo(startX + 2 * r, baseY - 150);
             ctx.strokeStyle = "#EAC148";
-            ctx.lineWidth = 8;
+            ctx.lineWidth = r/10;
             ctx.stroke();
         }
     }
